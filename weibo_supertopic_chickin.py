@@ -156,7 +156,7 @@ def supertopic_checkin(item: dict):
     return msg
 
 
-if __name__ == '__main__':
+def main():
     supertopic_list = get_supertopic_list()
     msg_list = []
     success_count = 0
@@ -179,3 +179,7 @@ if __name__ == '__main__':
             content += "  "
         # 发送通知
         send_message_pushplus(title, content, "txt")
+
+
+if __name__ == '__main__':
+    main()
