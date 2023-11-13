@@ -52,7 +52,7 @@ def get_user_name() -> str:
 
 # 获取超话列表
 def get_supertopic_list() -> list:
-    print(" 开始获取超话列表 ".center(30, "#"))
+    print(f" 开始获取[{get_user_name()}]的超话列表 ".center(30, "#"))
     since_id = ""
     super_list = []
 
@@ -169,10 +169,10 @@ def main():
                 success_count += 1
             msg_list.append(msg)
             # 添加随机等待值
-            time.sleep(random.randint(5, 10))
+            time.sleep(random.randint(3, 7))
         print(" 签到完成 ".center(30, "#"))
 
-        title = f"用户：{get_user_name()},共{total_count}个,成功签到{success_count}个"
+        title = f"微博超话：共{total_count}个,成功签到{success_count}个"
         content = ""
         for msg in msg_list:
             content += msg["title"] + ":" + ("签到成功" if msg["status"] else "签到失败")
