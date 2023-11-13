@@ -172,7 +172,7 @@ def main():
             time.sleep(random.randint(5, 10))
         print(" 签到完成 ".center(30, "#"))
 
-        title = f"微博超话：共{total_count}个,成功签到{success_count}个"
+        title = f"用户：{get_user_name()},共{total_count}个,成功签到{success_count}个"
         content = ""
         for msg in msg_list:
             content += msg["title"] + ":" + ("签到成功" if msg["status"] else "签到失败")
