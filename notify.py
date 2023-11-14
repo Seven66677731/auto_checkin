@@ -4,16 +4,16 @@ import requests
 
 from utils import get_env
 
-pushplus_token = ""
+# pushplus_token = ""
+
+pushplus_token = get_env('pushplus_token')
 
 
 def send_message_pushplus(title, content, template='json'):
     url = "http://www.pushplus.plus/send"
     global pushplus_token
-    if pushplus_token == "":
-        pushplus_token = get_env('pushplus_token')
-        if pushplus_token is None:
-            print('未配置推送加token，请检查配置')
+    if pushplus_token == "" or pushplus_token is None:
+        print('未配置推送加token，请检查配置')
         return
     data = {
         "token": pushplus_token,

@@ -3,6 +3,8 @@ import requests
 from notify import send_message_pushplus
 from utils import get_env
 
+# refresh_token = ""
+
 refresh_token = get_env("refresh_token")
 
 CHECKIN_URL = 'https://member.aliyundrive.com/v1/activity/sign_in_list'
