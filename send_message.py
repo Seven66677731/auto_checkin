@@ -4,6 +4,8 @@ import requests
 
 from utils import get_env
 
+pushplus_token = ""
+
 
 def send_message_pushplus(title, content, template='json'):
     url = "http://www.pushplus.plus/send"
