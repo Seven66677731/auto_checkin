@@ -14,9 +14,6 @@ from Crypto.Util.Padding import pad
 from notify import send_message_pushplus
 from utils import get_env
 
-account = get_env("xiaomi_account")
-password = get_env("xiaomi_password")
-
 content = {}
 
 
@@ -155,6 +152,8 @@ def check_status(cookie):
 
 # 主程序
 def main():
+    account = get_env("xiaomi_account")
+    password = get_env("xiaomi_password")
     for i in range(5):
         cookie = login(account, password)
         if len(cookie) != 0:
