@@ -1,3 +1,6 @@
+import random
+import time
+
 import requests
 
 from notify import send_message_pushplus
@@ -140,4 +143,7 @@ def main():
 
 
 if __name__ == '__main__':
+    time.sleep(random.randint(3, 5))
+    print(" 阿里云盘任务 ".center(30, "#"))
     main()
+    print(" 结束阿里云盘任务 ".center(30, "#"))

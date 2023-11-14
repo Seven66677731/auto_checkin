@@ -182,4 +182,7 @@ def main():
 
 
 if __name__ == '__main__':
+    time.sleep(random.randint(3, 5))
+    print(" 微博超话任务 ".center(30, "#"))
     main()
+    print(" 结束微博超话任务 ".center(30, "#"))
