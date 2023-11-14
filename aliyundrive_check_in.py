@@ -134,7 +134,7 @@ def main():
         content += res['message']
         print(f"签到失败：{res['message']}")
     print(" 签到完成 ".center(30, "#"))
-    send_message_pushplus(title, content)
+    send_message_pushplus(title, content, "txt")
 
 
 if __name__ == '__main__':
