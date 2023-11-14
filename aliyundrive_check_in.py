@@ -1,6 +1,6 @@
 import requests
 
-from send_message import send_message_pushplus
+from notify import send_message_pushplus
 from utils import get_env
 
 refresh_token = get_env("refresh_token")

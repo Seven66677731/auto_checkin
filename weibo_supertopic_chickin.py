@@ -3,7 +3,7 @@ import re
 import time
 import random
 
-from send_message import send_message_pushplus
+from notify import send_message_pushplus
 from utils import get_env
 
 # weibo_gsid = ""
