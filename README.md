@@ -34,13 +34,13 @@
 1. 手机登录微博打开超话列表，使用抓包软件进行抓包
 2. 搜索```cardlist```
 3. 找到以```https[:]//api.weibo.cn/2/cardlist```开头的链接
-4. 将请求参数中的```gsid ``` ```from``` ```s``` ```uid```复制
+4. 将请求参数中的```gsid``` ```from``` ```s``` ```uid```复制
 5. 在青龙面板的```环境变量```中添加```weibo_gsid``` ```weibo_from``` ```weibo_s``` ```weibo_uid```
    值为4个参数的值
 
 ## 阿里云盘签到
 
-1. 登录[阿里云盘](https://www.aliyundrive.com/drive/),控制台粘贴
+1. 登录[阿里云盘](https://www.aliyundrive.com/drive/) 控制台粘贴
    ```
    copy(JSON.parse(localStorage.token).refresh_token); console.log(JSON.parse(localStorage.token).refresh_token);
    ```
