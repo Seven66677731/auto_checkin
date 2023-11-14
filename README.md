@@ -1,4 +1,7 @@
 # 基于青龙面板的自动签到
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+![Python](https://img.shields.io/badge/python-3.7+-blue) 
+
 
 ## 基础配置
 
