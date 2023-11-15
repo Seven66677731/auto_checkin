@@ -194,8 +194,11 @@ def main():
         for action in ['info', 'check_in', 'like', 'browse', 'carrot', 'check_status']:
             eval(f'{action}(cookie)')
     title = "小米社区"
-    send_message_pushplus(title, content, "txt")
+    send_message_pushplus(title, content, "json")
 
 
 if __name__ == '__main__':
+    time.sleep(random.randint(3, 5))
+    print(" 小米社区任务开始 ".center(30, "#"))
     main()
+    print(" 小米社区任务结束 ".center(30, "#"))
