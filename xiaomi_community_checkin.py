@@ -14,6 +14,10 @@ from Crypto.Util.Padding import pad
 from notify import send_message_pushplus
 from utils import get_env
 
+account = get_env('xiaomi_uid')
+password = get_env('xiaomi_password')
+user_agent = get_env('user_agent')
+
 content = {}
 
 
@@ -103,7 +107,8 @@ def like(cookie):
 
 # 浏览帖子
 def browse(cookie):
-    url = f'https://api.vip.miui.com/mtop/planet/vip/member/addCommunityGrowUpPointByActionV2?miui_vip_ph={cookie["miui_vip_ph"]}'
+    url = (f'https://api.vip.miui.com/mtop/planet/vip/member/addCommunityGrowUpPointByActionV2?'
+           f'miui_vip_ph={cookie["miui_vip_ph"]}')
     for action in ['BROWSE_POST_10S', 'BROWSE_SPECIAL_PAGES_SPECIAL_PAGE', 'BROWSE_SPECIAL_PAGES_USER_HOME']:
         data = {'action': action, 'miui_vip_ph': cookie['miui_vip_ph']}
         requests.post(url, cookies=cookie, data=data)
@@ -117,8 +122,6 @@ def carrot(cookie):
 
 # 获取cookie
 
-user_agent = get_env("user_agent")
-
 
 def md5_crypto(password: str) -> str:
     md5 = hashlib.md5()
@@ -127,7 +130,7 @@ def md5_crypto(password: str) -> str:
     return result.upper()
 
 
-def login(uid, password):
+def login(uid, password, user_agent):
     password = md5_crypto(password)
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -153,14 +156,14 @@ def login(uid, password):
 
     url = 'https://account.xiaomi.com/pass/serviceLoginAuth2'
     sha1 = hashlib.sha1()
-    Auth = json.loads(requests.post(url=url, headers=headers, data=data).text.replace('&&&START&&&', ''))
-    if Auth['description'] == '登录验证失败':
+    login_json = json.loads(requests.post(url=url, headers=headers, data=data).text.replace('&&&START&&&', ''))
+    if login_json['description'] == '登录验证失败':
         return 'Error'
-    sha1.update(('nonce=' + str(Auth['nonce']) + '&' + Auth['ssecurity']).encode('utf-8'))
-    clientSign = base64.encodebytes(binascii.a2b_hex(sha1.hexdigest().encode('utf-8'))).decode(
+    sha1.update(('nonce=' + str(login_json['nonce']) + '&' + login_json['ssecurity']).encode('utf-8'))
+    client_sign = base64.encodebytes(binascii.a2b_hex(sha1.hexdigest().encode('utf-8'))).decode(
         encoding='utf-8').strip()
-    nurl = Auth['location'] + '&_userIdNeedEncrypt=true&clientSign=' + clientSign
-    cookie = requests.utils.dict_from_cookiejar(requests.get(url=nurl).cookies)
+    location_url = login_json['location'] + '&_userIdNeedEncrypt=true&clientSign=' + client_sign
+    cookie = dict(requests.get(url=location_url).cookies)
     return cookie
 
 
@@ -179,11 +182,11 @@ def check_status(cookie):
 
 # 主程序
 def main():
-    account = get_env("xiaomi_uid")
-    password = get_env("xiaomi_password")
+    time.sleep(random.randint(3, 5))
+    print(" 小米社区任务开始 ".center(30, "#"))
+    cookie = {}
     for i in range(5):
-
-        cookie = login(account, password)
+        cookie = login(account, password, user_agent)
         if len(cookie) != 0:
             break
         else:
@@ -195,10 +198,8 @@ def main():
             eval(f'{action}(cookie)')
     title = "小米社区"
     send_message_pushplus(title, content, "json")
+    print(" 小米社区任务结束 ".center(30, "#"))
 
 
 if __name__ == '__main__':
-    time.sleep(random.randint(3, 5))
-    print(" 小米社区任务开始 ".center(30, "#"))
     main()
-    print(" 小米社区任务结束 ".center(30, "#"))
