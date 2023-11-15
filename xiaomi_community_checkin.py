@@ -116,16 +116,43 @@ def carrot(cookie):
 
 
 # 获取cookie
-def login(account, password):
+
+user_agent = get_env("user_agent")
+
+
+def md5_crypto(password: str) -> str:
     md5 = hashlib.md5()
     md5.update(password.encode())
-    Hash = md5.hexdigest()
-    sha1 = hashlib.sha1()
-    url = 'https://account.xiaomi.com/pass/serviceLoginAuth2'
+    result = md5.hexdigest()
+    return result.upper()
+
+
+def login(uid, password):
+    password = md5_crypto(password)
     headers = {
-        'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 12; Redmi K20 Pro Build/SKQ1.211006.001) APP/xiaomi.vipaccount APPV/231026 MK/UmVkbWkgSzIwIFBybw== SDKV/5.1.0.release.13 PassportSDK/5.1.0.release.15 passport-ui/5.1.0.release.15'}
-    data = {'callback': 'https://api.vip.miui.com/sts', '_json': 'true', 'user': account, 'hash': Hash.upper(),
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Referer': 'https://account.xiaomi.com/fe/service/login/password?sid=miui_vip&qs=%253Fcallback%253Dhttp'
+                   '%25253A%25252F%25252Fapi.vip.miui.com%25252Fsts%25253Fsign%25253D4II4ABwZkiJzkd2YSkyEZukI4Ak'
+                   '%2525253D%252526followup%25253Dhttps%2525253A%2525252F%2525252Fapi.vip.miui.com%2525252Fpage'
+                   '%2525252Flogin%2525253FdestUrl%2525253Dhttps%252525253A%252525252F%252525252Fweb.vip.miui.com'
+                   '%252525252Fpage%252525252Finfo%252525252Fmio%252525252Fmio%252525252FinternalTest%252525253Fref'
+                   '%252525253Dhomepage%2526sid%253Dmiui_vip&callback=http%3A%2F%2Fapi.vip.miui.com%2Fsts%3Fsign'
+                   '%3D4II4ABwZkiJzkd2YSkyEZukI4Ak%253D%26followup%3Dhttps%253A%252F%252Fapi.vip.miui.com%252Fpage'
+                   '%252Flogin%253FdestUrl%253Dhttps%25253A%25252F%25252Fweb.vip.miui.com%25252Fpage%25252Finfo'
+                   '%25252Fmio%25252Fmio%25252FinternalTest%25253Fref%25253Dhomepage&_sign=L%2BdSQY6sjSQ%2FCRjJs4p'
+                   '%2BU1vNYLY%3D&serviceParam=%7B%22checkSafePhone%22%3Afalse%2C%22checkSafeAddress%22%3Afalse%2C'
+                   '%22lsrp_score%22%3A0.0%7D&showActiveX=false&theme=&needTheme=false&bizDeviceType=',
+        'User-Agent': user_agent,
+        'Origin': 'https://account.xiaomi.com',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Cookie': 'deviceId=; pass_ua=web; uLocale=zh_CN'
+    }
+
+    data = {'callback': 'https://api.vip.miui.com/sts', '_json': 'true', 'user': str(uid), 'hash': str(password),
             'sid': 'miui_vip', '_sign': 'ZJxpm3Q5cu0qDOMkKdWYRPeCwps=', '_locale': 'zh_CN'}
+
+    url = 'https://account.xiaomi.com/pass/serviceLoginAuth2'
+    sha1 = hashlib.sha1()
     Auth = json.loads(requests.post(url=url, headers=headers, data=data).text.replace('&&&START&&&', ''))
     if Auth['description'] == '登录验证失败':
         return 'Error'
@@ -152,9 +179,10 @@ def check_status(cookie):
 
 # 主程序
 def main():
-    account = get_env("xiaomi_account")
+    account = get_env("xiaomi_uid")
     password = get_env("xiaomi_password")
     for i in range(5):
+
         cookie = login(account, password)
         if len(cookie) != 0:
             break
