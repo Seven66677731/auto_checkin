@@ -107,6 +107,8 @@ def get_reward_and_task(access_token: str) -> dict:
 
 
 def main():
+    time.sleep(random.randint(3, 5))
+    print(" 阿里云盘任务 ".center(30, "#"))
     res = get_access_token(refresh_token)
     title = '阿里云盘签到'
     content = ''
@@ -140,10 +142,9 @@ def main():
         print(f"签到失败：{res['message']}")
     print(" 签到完成 ".center(30, "#"))
     send_message_pushplus(title, content, "txt")
+    print(" 结束阿里云盘任务 ".center(30, "#"))
+    print("\n")
 
 
 if __name__ == '__main__':
-    time.sleep(random.randint(3, 5))
-    print(" 阿里云盘任务 ".center(30, "#"))
     main()
-    print(" 结束阿里云盘任务 ".center(30, "#"))

@@ -157,6 +157,8 @@ def supertopic_checkin(item: dict):
 
 
 def main():
+    time.sleep(random.randint(3, 5))
+    print(" 微博超话任务 ".center(30, "#"))
     supertopic_list = get_supertopic_list()
     msg_list = []
     success_count = 0
@@ -179,10 +181,9 @@ def main():
             content += "  "
         # 发送通知
         send_message_pushplus(title, content, "txt")
+    print(" 结束微博超话任务 ".center(30, "#"))
+    print("\n")
 
 
 if __name__ == '__main__':
-    time.sleep(random.randint(3, 5))
-    print(" 微博超话任务 ".center(30, "#"))
     main()
-    print(" 结束微博超话任务 ".center(30, "#"))

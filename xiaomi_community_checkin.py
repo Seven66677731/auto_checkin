@@ -14,6 +14,10 @@ from Crypto.Util.Padding import pad
 from notify import send_message_pushplus
 from utils import get_env
 
+# account = ''
+# password = ''
+# user_agent = ''
+
 account = get_env('xiaomi_uid')
 password = get_env('xiaomi_password')
 user_agent = get_env('user_agent')
@@ -199,6 +203,7 @@ def main():
     title = "小米社区"
     send_message_pushplus(title, content, "json")
     print(" 小米社区任务结束 ".center(30, "#"))
+    print("\n")
 
 
 if __name__ == '__main__':
