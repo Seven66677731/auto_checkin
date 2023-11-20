@@ -1,17 +1,12 @@
 import random
 import time
-
 import requests
-
 from notify import send_message_pushplus
 from utils import get_env
 
 # refresh_token = ""
 
 refresh_token = get_env("refresh_token")
-
-CHECKIN_URL = 'https://member.aliyundrive.com/v1/activity/sign_in_list'
-REWARD_URL = 'https://member.aliyundrive.com/v1/activity/sign_in_reward'
 
 
 def get_access_token(token) -> dict:
@@ -44,10 +39,11 @@ def check_in(access_token: str) -> dict:
     """
     签到
     """
+    url = 'https://member.aliyundrive.com/v1/activity/sign_in_list'
     payload = {'isReward': False}
     headers = {'Authorization': f'Bearer {access_token}'}
     params = {'_rx-s': 'mobile'}
-    resp = requests.post(CHECKIN_URL, json=payload, params=params, headers=headers).json()
+    resp = requests.post(url, json=payload, params=params, headers=headers).json()
 
     if 'success' not in resp:
         msg = {
@@ -94,8 +90,18 @@ def get_reward_and_task(access_token: str) -> dict:
         remind = reward['remind']
         types = reward['type']
 
+        # 签到奖励
         if types == "dailySignIn":
             award_notice = name
+            reward_status = reward['status']
+            if reward_status == 'finished':
+                b = receive_reward(access_token, day)
+                award_notice += '【领取成功】' if b else '【领取失败】'
+            elif reward_status == 'verification':
+                award_notice += '【已领取】'
+            else:
+                award_notice += '【领取失败】'
+        # 每日任务
         if types == "dailyTask":
             task_notice = f'{remind}（{name}）'
     return {
@@ -104,6 +110,20 @@ def get_reward_and_task(access_token: str) -> dict:
         "award_notice": award_notice,
         "task_notice": task_notice
     }
+
+
+def receive_reward(access_token: str, day: int) -> bool:
+    """
+    领取奖励
+    :param access_token: token
+    :param day: 领取第几天的奖励
+    :return: 是否领取成功
+    """
+    url = 'https://member.aliyundrive.com/v1/activity/sign_in_reward'
+    payload = {'signInDay': day}
+    headers = {'Authorization': f'Bearer {access_token}'}
+    resp = requests.post(url, json=payload, headers=headers).json()
+    return resp['success']
 
 
 def main():
@@ -122,9 +142,9 @@ def main():
             reward_and_task_info_json = get_reward_and_task(access_token)
             if reward_and_task_info_json["status"]:
                 print("获取奖励信息和任务信息成功")
-                result = (f"用户：{res['name']}\n"
+                result = (f"今日奖励：{reward_and_task_info_json['award_notice']}\n"
+                          f"用户：{res['name']}\n"
                           f"连续签到天数：{check_in_json['signin_count']}\n"
-                          f"今日奖励：{reward_and_task_info_json['award_notice']}\n"
                           f"今日任务：{reward_and_task_info_json['task_notice']}")
                 print(result)
                 content += result
