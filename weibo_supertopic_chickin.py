@@ -177,7 +177,8 @@ def main():
         title = f"微博超话：共{total_count}个,成功签到{success_count}个"
         content = ""
         for msg in msg_list:
-            content += msg["title"] + ":" + (" ✅ " if msg["status"] else " ❌ ")
+            content += msg["title"] + ":" + ("√" if msg["status"] else "×")
+            content += "  "
         # 发送通知
         send_message_pushplus(title, content, "txt")
     print(" 结束微博超话任务 ".center(30, "#"))
