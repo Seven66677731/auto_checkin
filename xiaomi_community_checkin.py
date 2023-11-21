@@ -177,11 +177,11 @@ def check_status(cookie):
     result = requests.get(url=url, cookies=cookie).json()
     for i in result['entity'][2]['data']:
         if i['jumpText'] == '已完成':
-            content.update({i['title']: '√'})
-            print(i['title'], '√')
+            content.update({i['title']: ' ✅'})
+            print(i['title'], ' ✅')
         elif i['jumpText'] == '':
-            content.update({i['title']: '×'})
-            print(i['title'], '×')
+            content.update({i['title']: ' ❌'})
+            print(i['title'], ' ❌')
 
 
 # 主程序
