@@ -82,11 +82,9 @@ def get_token():
 def info(cookie):
     url = 'https://api.vip.miui.com/mtop/planet/vip/homepage/mineInfo'
     result = requests.get(url=url, cookies=cookie).json()
-    info = (f'昵称：{result["entity"]["userInfo"]["userName"]}'
-            f'等级：{result["entity"]["userInfo"]["userGrowLevelInfo"]["showLevel"]}'
-            f'积分：{result["entity"]["userInfo"]["userGrowLevelInfo"]["point"]}')
-    print(info)
-    content.update({"info": info})
+    content.update({'昵称': f'{result["entity"]["userInfo"]["userName"]}'})
+    content.update({'等级': f'{result["entity"]["userInfo"]["userGrowLevelInfo"]["showLevel"]}'})
+    content.update({'积分': f'{result["entity"]["userInfo"]["userGrowLevelInfo"]["point"]}'})
 
 
 # 签到
@@ -106,7 +104,7 @@ def check_in(cookie):
 def like(cookie):
     url = 'https://api.vip.miui.com/mtop/planet/vip/content/announceThumbUp'
     data = {'postId': '36625780', 'sign': '36625780', 'timestamp': int(round(time.time() * 1000))}
-    requests.get(url=url, cookies=cookie, data=data)
+    get = requests.get(url=url, cookies=cookie, data=data)
 
 
 # 浏览帖子
@@ -177,10 +175,10 @@ def check_status(cookie):
     result = requests.get(url=url, cookies=cookie).json()
     for i in result['entity'][2]['data']:
         if i['jumpText'] == '已完成':
-            content.update({i['title']: ' ✅'})
+            content.update({i['title']: '成功'})
             print(i['title'], ' ✅')
         elif i['jumpText'] == '':
-            content.update({i['title']: ' ❌'})
+            content.update({i['title']: ' 失败'})
             print(i['title'], ' ❌')
 
 
@@ -198,11 +196,15 @@ def main():
     if len(cookie) == 0 or cookie == 'Error':
         print(f'{account}：登录失败')
     else:
-        for action in ['info', 'check_in', 'like', 'browse', 'carrot', 'check_status']:
-            eval(f'{action}(cookie)')
+        like(cookie)
+        browse(cookie)
+        info(cookie)
+        check_status(cookie)
     title = "小米社区"
+
     send_message_pushplus(title, content, "json")
     print(" 小米社区任务结束 ".center(30, "#"))
+    print(content)
     print("\n")
 
 
