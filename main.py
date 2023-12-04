@@ -8,4 +8,4 @@ if __name__ == '__main__':
     # 阿里云盘签到
     aliyundrive_checkin.main()
     # 小米社区签到
-    xiaomi_community_checkin.main()
+    # xiaomi_community_checkin.main()
