@@ -13,7 +13,7 @@ def get_access_token(token) -> dict:
     """
     通过refresh_token获取accessToken和相关信息
     """
-    url = 'https://auth.aliyundrive.com/v2/account/token'
+    url = 'https://auth.alipan.com/v2/account/token'
     payload = {
         'grant_type': 'refresh_token',
         'refresh_token': token
@@ -39,7 +39,7 @@ def check_in(access_token: str) -> dict:
     """
     签到
     """
-    url = 'https://member.aliyundrive.com/v1/activity/sign_in_list'
+    url = 'https://member.alipan.com/v1/activity/sign_in_list'
     payload = {'isReward': False}
     headers = {'Authorization': f'Bearer {access_token}'}
     params = {'_rx-s': 'mobile'}
@@ -64,7 +64,7 @@ def get_reward_and_task(access_token: str) -> dict:
     """
     获取奖励信息和今日任务
     """
-    url = 'https://member.aliyundrive.com/v2/activity/sign_in_list'
+    url = 'https://member.alipan.com/v2/activity/sign_in_list'
     headers = {'Authorization': f'Bearer {access_token}'}
     payload = {}
     params = {'_rx-s': 'mobile'}
@@ -119,7 +119,7 @@ def receive_reward(access_token: str, day: int) -> bool:
     :param day: 领取第几天的奖励
     :return: 是否领取成功
     """
-    url = 'https://member.aliyundrive.com/v1/activity/sign_in_reward'
+    url = 'https://member.alipan.com/v1/activity/sign_in_reward'
     payload = {'signInDay': day}
     headers = {'Authorization': f'Bearer {access_token}'}
     resp = requests.post(url, json=payload, headers=headers).json()
